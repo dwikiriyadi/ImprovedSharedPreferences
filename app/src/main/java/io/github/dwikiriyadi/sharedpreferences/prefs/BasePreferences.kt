@@ -1,24 +1,11 @@
 package io.github.dwikiriyadi.sharedpreferences.prefs
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 import kotlin.reflect.jvm.kotlinFunction
 
-open class BasePreferences(context: Context, prefsName: String) {
-    private val sharedPref: SharedPreferences =
-        EncryptedSharedPreferences.create(
-            context,
-            prefsName,
-            MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-
+open class BasePreferences(delegate : BasePreferencesContract) : BasePreferencesContract by delegate {
     private val editor = sharedPref.edit()
 
     fun clear() {
